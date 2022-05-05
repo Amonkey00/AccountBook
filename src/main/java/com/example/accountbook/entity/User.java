@@ -1,5 +1,7 @@
 package com.example.accountbook.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -8,7 +10,8 @@ import java.util.Date;
 @Data
 @TableName("user_info")
 public class User {
-    private int uId;
+    @TableId(value="u_id", type= IdType.AUTO)
+    private Integer uId;
     private String name;
     private String account;
     private String password;

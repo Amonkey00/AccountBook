@@ -1,5 +1,7 @@
 package com.example.accountbook.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -8,10 +10,11 @@ import java.util.Date;
 @Data
 @TableName("group_info")
 public class BillGroup {
-    private int gId;
+    @TableId(value="g_id", type= IdType.AUTO)
+    private Integer gId;
     private String groupName;
     private String groupInfo;
-    private int creatorId;
+    private Integer creatorId;
     private String creator_name;
     private Date createTime;
 }

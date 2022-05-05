@@ -2,11 +2,14 @@ package com.example.accountbook.config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.example.accountbook.interceptor.AuthenticationInterceptor;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.nio.charset.StandardCharsets;
@@ -17,7 +20,7 @@ import java.util.List;
 @EnableAutoConfiguration(exclude = {
         JmxAutoConfiguration.class
 })
-public class FastJsonConfig extends WebMvcConfigurationSupport{
+public class InterceptConfig extends WebMvcConfigurationSupport{
 
     @Override
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -46,5 +49,16 @@ public class FastJsonConfig extends WebMvcConfigurationSupport{
         mediaTypesList.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(mediaTypesList);
         converters.add(converter);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authenticationInterceptor())
+                .addPathPatterns("/**");
+    }
+
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor(){
+        return new AuthenticationInterceptor();
     }
 }

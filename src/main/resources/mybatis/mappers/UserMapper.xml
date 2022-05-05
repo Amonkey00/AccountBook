@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.accountbook.dao.UserMapper">
+
+    <select id="countUserList" resultType="_int">
+        SELECT COUNT(*)
+        FROM user_info
+        <if test="groupId != null">
+            WHERE u_id in
+            (SELECT userId
+            FROM group_role
+            WHERE groupId = #{groupId})
+        </if>
+    </select>
+
+    <select id="queryUserList" resultType="com.example.accountbook.entity.User">
+        SELECT u_id,name,account,password,email,password,create_time,status,introduction
+        FROM user_info
+        <if test="groupId != null">
+            WHERE u_id in
+                (SELECT userId
+                 FROM group_role
+                 WHERE groupId = #{groupId})
+        </if>
+        LIMIT #{start}, #{limit}
+    </select>
+
+</mapper>

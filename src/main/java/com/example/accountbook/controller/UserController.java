@@ -1,17 +1,22 @@
 package com.example.accountbook.controller;
 
+import com.example.accountbook.annotations.PassToken;
 import com.example.accountbook.entity.User;
+import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.UserService;
+import com.example.accountbook.service.impl.UserServiceImpl;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
+import com.example.accountbook.vo.user.UserListRespVo;
 import com.example.accountbook.vo.user.UserLoginRespVo;
 import com.example.accountbook.vo.user.UserRegisterRespVo;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -21,8 +26,9 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
+    @PassToken
     public JsonResult register(
-            UserRegisterRespVo registerVo
+            @RequestBody UserRegisterRespVo registerVo
     ) {
         String token = "";
         User user = buildUser(registerVo);
@@ -49,7 +55,7 @@ public class UserController {
 
     @PostMapping("/login")
     public JsonResult login(
-            UserLoginRespVo loginRespVo
+            @RequestBody UserLoginRespVo loginRespVo
     ) {
         // 1. check exists
         User existsUser = userService.getUserByAccount(loginRespVo.getAccount());
@@ -66,6 +72,67 @@ public class UserController {
         return new JsonResult<String>(token);
     }
 
+    @GetMapping("/get")
+    public JsonResult getUser(
+            @RequestParam("userId") Integer userId
+    ) {
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            return new JsonResult(-1,"User 不存在该userId账户");
+        }
+        return new JsonResult(user);
+    }
+
+    @GetMapping("/getList")
+    public JsonResult getUserList(
+            @RequestParam(value = "groupId",required = false) Integer groupId,
+            @RequestParam(value = "start") Integer start,
+            @RequestParam(value = "size") Integer size
+    ){
+        PageResult userList = userService.getUserList(groupId, start, size);
+        return new JsonResult(userList);
+    }
+
+    /**
+     * 模糊匹配 搜索account
+     */
+    @GetMapping("/searchUser")
+    public JsonResult searchUser(
+            @RequestParam(value = "keyword") String keyword,
+            @RequestParam(value = "start") Integer start,
+            @RequestParam(value = "size") Integer size
+    ) {
+        PageResult<User> result = userService.searchUser(keyword, start, size);
+        return new JsonResult(result);
+    }
+
+
+    @PostMapping("/update")
+    public JsonResult update(
+            @RequestBody User user
+    ) {
+        int flag = userService.updateUser(user);
+        if (flag > 0) {
+            return new JsonResult();
+        }
+        return new JsonResult(-1,"User 更新失败");
+    }
+
+    @GetMapping("/freshToken")
+    public JsonResult freshToken(
+            @Param("token") String token
+    ) {
+        try {
+            String newToken = JwtUtil.freshJwt(token);
+            return new JsonResult<String>(newToken);
+        }catch (Exception e) {
+            return new JsonResult(-1,"Token fresh失败");
+        }
+    }
+
+
+
+    // ===================== Utils =================
     /**
      * 映射 registerVo -> entity.user
      */

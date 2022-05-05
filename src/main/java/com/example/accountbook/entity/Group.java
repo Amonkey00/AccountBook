@@ -9,12 +9,12 @@ import java.util.Date;
 
 @Data
 @TableName("group_info")
-public class BillGroup {
+public class Group {
     @TableId(value="g_id", type= IdType.AUTO)
     private Integer gId;
     private String groupName;
     private String groupInfo;
     private Integer creatorId;
-    private String creator_name;
+    private String creatorName;
     private Date createTime;
 }

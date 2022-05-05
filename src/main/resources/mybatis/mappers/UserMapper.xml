@@ -9,9 +9,9 @@
         FROM user_info
         <if test="groupId != null">
             WHERE u_id in
-            (SELECT userId
+            (SELECT user_id
             FROM group_role
-            WHERE groupId = #{groupId})
+            WHERE group_id = #{groupId})
         </if>
     </select>
 
@@ -20,9 +20,9 @@
         FROM user_info
         <if test="groupId != null">
             WHERE u_id in
-                (SELECT userId
+                (SELECT user_id
                  FROM group_role
-                 WHERE groupId = #{groupId})
+                 WHERE group_id = #{groupId})
         </if>
         LIMIT #{start}, #{limit}
     </select>

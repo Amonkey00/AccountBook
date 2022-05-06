@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.accountbook.dao.RecordMapper">
+
+    <select id="countRecordList" parameterType="com.example.accountbook.vo.record.RecordListReqVo" resultType="_int">
+        SELECT COUNT(*)
+        FROM bill_record
+        WHERE r_id > 0
+        <if test="fromDate != null">
+            AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
+        </if>
+        <if test="userIds != null">
+            AND creator_id IN
+            <foreach item="item1" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item1}
+            </foreach>
+        </if>
+        <if test="typeIds != null">
+            AND type_id IN
+            <foreach item="item2" index="index" collection="typeIds" open="(" separator="," close=")">
+                #{item2}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryRecordList" parameterType="com.example.accountbook.vo.record.RecordListReqVo" resultType="com.example.accountbook.entity.BillRecord">
+        SELECT r_id, group_id, type_id, name, record_time, amount, information, creator_id, creator_name, create_time, status
+        FROM bill_record
+        WHERE r_id > 0
+        <if test="fromDate != null">
+            AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
+        </if>
+        <if test="userIds != null">
+            AND creator_id IN
+            <foreach item="item1" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item1}
+            </foreach>
+        </if>
+        <if test="typeIds != null">
+            AND type_id IN
+            <foreach item="item2" index="index" collection="typeIds" open="(" separator="," close=")">
+                #{item2}
+            </foreach>
+        </if>
+        LIMIT #{start}, #{size}
+    </select>
+
+
+</mapper>

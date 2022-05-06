@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @TableName("type_info")
-public class ColumnType {
+public class ColumnType implements Serializable {
     @TableId(value="t_id", type= IdType.AUTO)
     private Integer tId;
     private Integer name;

@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @TableName("group_role")
 @NoArgsConstructor
-public class Role {
+public class Role implements Serializable {
     @TableId(value="id", type= IdType.AUTO)
     private Integer id;
 

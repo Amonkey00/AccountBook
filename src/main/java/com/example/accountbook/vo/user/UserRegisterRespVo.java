@@ -2,10 +2,11 @@ package com.example.accountbook.vo.user;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class UserRegisterRespVo {
+public class UserRegisterRespVo implements Serializable {
     private String name;
     private String account;
     private String password;

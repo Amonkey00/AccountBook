@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @TableName("group_info")
-public class Group {
+public class Group implements Serializable {
     @TableId(value="g_id", type= IdType.AUTO)
     private Integer gId;
     private String groupName;

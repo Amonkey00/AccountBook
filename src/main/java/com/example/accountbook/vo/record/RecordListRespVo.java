@@ -1,17 +1,12 @@
-package com.example.accountbook.entity;
+package com.example.accountbook.vo.record;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@TableName("bill_record")
-public class BillRecord implements Serializable {
-    @TableId(value="r_id", type= IdType.AUTO)
+public class RecordListRespVo implements Serializable {
     private Integer rId;
     private Integer groupId;
     private Integer typeId;
@@ -22,5 +17,4 @@ public class BillRecord implements Serializable {
     private Integer creatorId;
     private String creatorName;
     private Date createTime;
-    private Integer status;
 }

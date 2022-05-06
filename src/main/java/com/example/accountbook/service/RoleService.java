@@ -8,13 +8,13 @@ import java.util.Map;
 
 public interface RoleService {
 
-    public Role getRole(Integer groupId, Integer userId);
+    Role getRole(Integer groupId, Integer userId);
     /**
      * 增删改人员权限
      */
-    public int addRole(Role role);
-    public int deleteRole(Role role);
-    public int updateRole(Role role, Integer statusCode);
+    int addRole(Role role);
+    int deleteRole(Role role);
+    int updateRole(Role role, Integer statusCode);
 
     /**
      * 获取权限

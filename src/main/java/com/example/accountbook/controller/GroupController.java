@@ -69,7 +69,7 @@ public class GroupController {
             @RequestBody Group group
     ) {
         String token = request.getHeader("token");
-        Integer userId = parseToken2Id(token);
+        Integer userId = JwtUtil.parseToken2Id(token);
         if (!checkGroupRole(userId,group.getGId(),RoleStatusEnum.ADMIN.getCode())) {
             return new JsonResult(-1,"update失败。没有该权限");
         }
@@ -120,16 +120,6 @@ public class GroupController {
         return group;
     }
 
-    private Integer parseToken2Id(String token) {
-        Integer userId = -1;
-        try {
-            Claims claims = JwtUtil.parseJwt(token);
-            userId = (Integer) claims.get("userId");
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-        return userId;
-    }
 
     private boolean checkGroupRole(Integer userId, Integer groupId, Integer roleCode) {
         if (groupId == null || userId == null) return false;

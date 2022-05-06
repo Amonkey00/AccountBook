@@ -83,6 +83,7 @@ public class JwtUtil {
             return false;
         }
         long issuedAt = claims.getIssuedAt().getTime();
+        if (claims.getExpiration() == null) return true;
         long expireTime = claims.getExpiration().getTime();
         long nowTimeStamp = System.currentTimeMillis();
         // Token expired
@@ -90,6 +91,17 @@ public class JwtUtil {
             return false;
         }
         return true;
+    }
+
+    public static Integer parseToken2Id(String token) {
+        Integer userId = -1;
+        try {
+            Claims claims = JwtUtil.parseJwt(token);
+            userId = (Integer) claims.get("userId");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return userId;
     }
 
     public static void main(String[] args) throws InterruptedException {

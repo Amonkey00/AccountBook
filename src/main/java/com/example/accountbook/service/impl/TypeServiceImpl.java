@@ -1,5 +1,6 @@
 package com.example.accountbook.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.accountbook.dao.TypeMapper;
 import com.example.accountbook.entity.ColumnType;
 import com.example.accountbook.service.TypeService;
@@ -17,6 +18,25 @@ public class TypeServiceImpl implements TypeService {
     @Override
     public int add(ColumnType type) {
         return typeMapper.insert(type);
+    }
+
+    @Override
+    public ColumnType getTypeById(Integer typeId) {
+        if (typeId == null) return null;
+        return typeMapper.selectById(typeId);
+    }
+
+    @Override
+    public ColumnType getTypeByName(String name) {
+        if (name == null) return null;
+        QueryWrapper<ColumnType> wrapper = new QueryWrapper<>();
+        wrapper.eq("name", name);
+        try {
+            return typeMapper.selectOne(wrapper);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

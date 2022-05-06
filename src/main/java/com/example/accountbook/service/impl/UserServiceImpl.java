@@ -6,6 +6,7 @@ import com.example.accountbook.dao.UserMapper;
 import com.example.accountbook.entity.User;
 import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.UserService;
+import com.example.accountbook.vo.user.UserInfoVo;
 import com.example.accountbook.vo.user.UserListRespVo;
 import org.springframework.stereotype.Service;
 
@@ -75,16 +76,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageResult<User> searchUser(String keyword, Integer start, Integer size) {
-        PageResult<User> result = new PageResult<>();
+    public PageResult<UserInfoVo> searchUser(String keyword, Integer start, Integer size) {
+        PageResult<UserInfoVo> result = new PageResult<>();
 
         // query like
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.like("account", "%"+keyword+"%");
         Page<User> userPage = userMapper.selectPage(new Page<>(start, size), wrapper);
 
+        List<UserInfoVo> voList = new ArrayList<>();
+        for (User user : userPage.getRecords()) {
+            voList.add(new UserInfoVo(user));
+        }
+        result.setDataList(voList);
+        result.setTotal((int) userPage.getTotal());
+        result.setPageSize((int) userPage.getPages());
+
         // build result
-        result = new PageResult<>(userPage);
         return result;
     }
 }

@@ -18,17 +18,32 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public int add(BillRecord record) {
-        return recordMapper.insert(record);
+        try {
+            return recordMapper.insert(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override
     public int update(BillRecord record) {
-        return recordMapper.updateById(record);
+        try {
+            return recordMapper.updateById(record);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override
     public int delete(BillRecord record) {
-        return recordMapper.deleteById(record);
+        try {
+            return recordMapper.deleteById(record);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     @Override

@@ -6,12 +6,15 @@ import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.RecordService;
 import com.example.accountbook.service.RoleService;
 import com.example.accountbook.utils.JsonResult;
+import com.example.accountbook.utils.JwtUtil;
 import com.example.accountbook.vo.record.RecordCreateReqVo;
 import com.example.accountbook.vo.record.RecordListReqVo;
-import org.apache.commons.lang.StringUtils;
+import com.example.accountbook.vo.record.RecordModifyReqVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/record")
@@ -68,11 +71,45 @@ public class RecordController {
         }
     }
 
+    @PostMapping("/update")
+    public JsonResult update(
+            HttpServletRequest request,
+            @RequestBody RecordModifyReqVo reqVo
+    ) {
+        if (reqVo.getRecord() == null || reqVo.getRecord().getRId() == null) {
+            return new JsonResult(-1,"record 信息出错");
+        }
+        String token = request.getHeader("token");
+        Integer userId = JwtUtil.parseToken2Id(token);
+        if (!checkRecordModify(userId, reqVo.getRecord())) {
+            return new JsonResult(-1,"没有权限或关联组出错");
+        }
+        int flag = recordService.update(reqVo.getRecord());
+        if (flag > 0) {
+            return new JsonResult();
+        }
+        return new JsonResult(-1,"Record更新失败");
+    }
 
-
-
-
-
+    @PostMapping("/delete")
+    public JsonResult delete(
+            HttpServletRequest request,
+            @RequestBody RecordModifyReqVo reqVo
+    ) {
+        if (reqVo.getRecord() == null || reqVo.getRecord().getRId() == null) {
+            return new JsonResult(-1,"record 信息出错");
+        }
+        String token = request.getHeader("token");
+        Integer userId = JwtUtil.parseToken2Id(token);
+        if (!checkRecordModify(userId, reqVo.getRecord())) {
+            return new JsonResult(-1,"没有权限或关联组出错");
+        }
+        int flag = recordService.delete(reqVo.getRecord());
+        if (flag > 0) {
+            return new JsonResult();
+        }
+        return new JsonResult(-1,"Record删除失败");
+    }
 
 
 
@@ -94,6 +131,18 @@ public class RecordController {
         Role role = roleService.getRole(record.getGroupId(), record.getCreatorId());
         if (role == null) return false;
         record.setStatus(role.getStatus());
+        return true;
+    }
+
+    private boolean checkRecordModify(Integer userId, BillRecord record) {
+        if (userId == null || record == null) return false;
+        // Creator of record can modify.
+        if (userId.equals(record.getCreatorId())) return true;
+        Role role = roleService.getRole(record.getGroupId(), userId);
+        // No privilege
+        if (role == null || role.getStatus() <= record.getStatus()) {
+            return false;
+        }
         return true;
     }
 }

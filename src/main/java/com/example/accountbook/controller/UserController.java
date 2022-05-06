@@ -7,6 +7,7 @@ import com.example.accountbook.service.UserService;
 import com.example.accountbook.service.impl.UserServiceImpl;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
+import com.example.accountbook.vo.user.UserInfoVo;
 import com.example.accountbook.vo.user.UserListRespVo;
 import com.example.accountbook.vo.user.UserLoginRespVo;
 import com.example.accountbook.vo.user.UserRegisterRespVo;
@@ -102,7 +103,7 @@ public class UserController {
             @RequestParam(value = "start") Integer start,
             @RequestParam(value = "size") Integer size
     ) {
-        PageResult<User> result = userService.searchUser(keyword, start, size);
+        PageResult<UserInfoVo> result = userService.searchUser(keyword, start, size);
         return new JsonResult(result);
     }
 
@@ -128,6 +129,14 @@ public class UserController {
         }catch (Exception e) {
             return new JsonResult(-1,"Token fresh失败");
         }
+    }
+
+    @GetMapping("/token")
+    public JsonResult getToken(
+            @Param("userId") Integer userId
+    ) {
+        String jwt = JwtUtil.buildJwt(userId);
+        return new JsonResult(jwt);
     }
 
 

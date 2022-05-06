@@ -30,11 +30,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public Group getGroupById(Integer groupId) {
+        if (groupId == null) return null;
         return groupMapper.selectById(groupId);
     }
 
     @Override
     public Group getGroupByName(String name) {
+        if (name == null) return null;
         QueryWrapper<Group> wrapper = new QueryWrapper<>();
         wrapper.eq("group_name",name);
         Group group = groupMapper.selectOne(wrapper);
@@ -48,7 +50,7 @@ public class GroupServiceImpl implements GroupService {
         // Query total
         Integer total = groupMapper.countGroupList(userId);
         // Query data
-        start = (start - 1) * size;
+        start = Math.max((start - 1) * size, 0);
         List<Group> groupList = groupMapper.queryGroupList(userId, start, size);
         // Parse pageNum
         result.setDataList(groupList);

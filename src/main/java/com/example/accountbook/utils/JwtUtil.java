@@ -93,10 +93,8 @@ public class JwtUtil {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJMT0dJTl9UT0tFTiIsImlzcyI6IkFDQ09VTlRCT09LX0pXVFBST1ZJREVSIiwiZXhwIjoxNjUxNzUzMDYwLCJ1c2VySWQiOjUsImlhdCI6MTY1MTc0OTQ2MCwianRpIjoiNmFlYjljMzgtOTcxMC00OTAxLTlmOTEtZjZlOTYyNTc1MTVjIn0.W9RdX1PHDKGlirZdCUJJwU5C39xiBeKdcRH5LFTE3fs";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date issuedAt = parseJwt(freshJwt(token)).getIssuedAt();
-        System.out.println(parseJwt(freshJwt(token)));
+        String s = buildJwt(2);
+        System.out.println(s);
     }
 
 }

@@ -14,7 +14,7 @@ public interface RoleService {
      */
     public int addRole(Role role);
     public int deleteRole(Role role);
-    public int updateRole(Role role, RoleStatusEnum roleEnum);
+    public int updateRole(Role role, Integer statusCode);
 
     /**
      * 获取权限

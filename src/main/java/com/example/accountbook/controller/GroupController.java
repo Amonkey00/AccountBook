@@ -61,12 +61,12 @@ public class GroupController {
     }
 
     /**
-     * 查询group
+     * 更新group
      */
     @PostMapping("/update")
     public JsonResult update(
-            @RequestBody Group group,
-            HttpServletRequest request
+            HttpServletRequest request,
+            @RequestBody Group group
     ) {
         String token = request.getHeader("token");
         Integer userId = parseToken2Id(token);
@@ -80,6 +80,10 @@ public class GroupController {
         return new JsonResult(-1,"Group 更新失败");
     }
 
+
+    /**
+     * 查询group
+     */
     @GetMapping("/get")
     public JsonResult get(
 
@@ -116,7 +120,6 @@ public class GroupController {
         return group;
     }
 
-
     private Integer parseToken2Id(String token) {
         Integer userId = -1;
         try {
@@ -127,7 +130,9 @@ public class GroupController {
         }
         return userId;
     }
+
     private boolean checkGroupRole(Integer userId, Integer groupId, Integer roleCode) {
+        if (groupId == null || userId == null) return false;
         Role role = roleService.getRole(groupId, userId);
         // Query role and check code
         if (role == null || role.getStatus() < roleCode) return false;

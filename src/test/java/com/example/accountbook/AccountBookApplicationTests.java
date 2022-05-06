@@ -2,7 +2,9 @@ package com.example.accountbook;
 
 import com.alibaba.fastjson.JSON;
 import com.example.accountbook.dao.UserMapper;
+import com.example.accountbook.entity.Group;
 import com.example.accountbook.entity.User;
+import com.example.accountbook.service.GroupService;
 import com.example.accountbook.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,8 @@ class AccountBookApplicationTests {
     UserMapper userMapper;
     @Resource
     UserServiceImpl userService;
+    @Resource
+    GroupService groupService;
     @Test
     void contextLoads() {
         User user = new User();
@@ -28,8 +32,8 @@ class AccountBookApplicationTests {
 
     @Test
     void test1() {
-        User user = userService.getUserByAccount("amonkey00");
-        System.out.println(JSON.toJSON(user));
+        Group group = groupService.getGroupById(6);
+        System.out.println(JSON.toJSON(group));
     }
 
 

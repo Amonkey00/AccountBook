@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByAccount(String account) {
+        if (account == null) return null;
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("account", account);
         User user = userMapper.selectOne(wrapper);
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Integer userId) {
+        if (userId == null) return null;
         User user = userMapper.selectById(userId);
         return user;
     }

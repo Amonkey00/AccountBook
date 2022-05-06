@@ -16,5 +16,5 @@ public interface GroupMapper extends BaseMapper<Group> {
 
     List<Group> queryGroupList(@Param("userId") Integer userId,
                                @Param("start") Integer start,
-                               @Param("size") Integer size);
+                               @Param("limit") Integer limit);
 }

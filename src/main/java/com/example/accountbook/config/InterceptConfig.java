@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
@@ -55,6 +56,15 @@ public class InterceptConfig extends WebMvcConfigurationSupport{
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
                 .addPathPatterns("/**");
+    }
+
+    @Override
+    protected void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH")
+                .maxAge(3600);
     }
 
     @Bean

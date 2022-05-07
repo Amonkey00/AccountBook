@@ -14,6 +14,7 @@ public interface UserService {
      * 更新用户
      */
     int updateUser(User user);
+    int updateUser(UserInfoVo userInfoVo);
 
     /**
      * 获取用户

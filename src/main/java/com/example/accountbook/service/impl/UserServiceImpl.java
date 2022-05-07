@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
         return userMapper.updateById(user);
     }
 
+    @Override
+    public int updateUser(UserInfoVo userInfoVo) {
+        return userMapper.updateUser(userInfoVo);
+    }
+
     /**
      * 通过account 获取用户
      */

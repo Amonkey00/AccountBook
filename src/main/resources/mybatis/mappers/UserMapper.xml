@@ -27,4 +27,11 @@
         LIMIT #{start}, #{limit}
     </select>
 
+    <update id="updateUser" parameterType="com.example.accountbook.vo.user.UserInfoVo">
+        UPDATE user_info
+        SET name =#{name}, email=#{email}, phone=#{phone}, status=#{status}, introduction=#{introduction}
+        WHERE u_id = #{uId}
+
+    </update>
+
 </mapper>

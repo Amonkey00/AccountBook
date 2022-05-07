@@ -1,8 +1,8 @@
 package com.example.accountbook.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.accountbook.entity.User;
+import com.example.accountbook.vo.user.UserInfoVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +18,6 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> queryUserList(@Param("groupId") Integer groupId,
                              @Param("start") Integer start,
                              @Param("limit") Integer limit);
+
+    Integer updateUser(UserInfoVo userInfoVo);
 }

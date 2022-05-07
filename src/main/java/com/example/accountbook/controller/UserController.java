@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -48,7 +49,7 @@ public class UserController {
             userService.addUser(user);
             user = userService.getUserByAccount(user.getAccount());
             token = JwtUtil.buildJwt(user.getUId());
-            return new JsonResult(token);
+            return new JsonResult(Arrays.asList(token, user.getUId(), user.getName()));
         }catch (Exception e) {
             return new JsonResult(-1, "USER INSERT添加失败");
         }
@@ -70,7 +71,7 @@ public class UserController {
 
         String token = "";
         token = JwtUtil.buildJwt(existsUser.getUId());
-        return new JsonResult<String>(token);
+        return new JsonResult(Arrays.asList(token, existsUser.getUId(), existsUser.getName()));
     }
 
     @GetMapping("/get")
@@ -81,7 +82,9 @@ public class UserController {
         if (user == null) {
             return new JsonResult(-1,"User 不存在该userId账户");
         }
-        return new JsonResult(user);
+        user.setPassword("");
+        UserInfoVo userInfoVo = new UserInfoVo(user);
+        return new JsonResult(userInfoVo);
     }
 
     @GetMapping("/getList")
@@ -110,7 +113,7 @@ public class UserController {
 
     @PostMapping("/update")
     public JsonResult update(
-            @RequestBody User user
+            @RequestBody UserInfoVo user
     ) {
         int flag = userService.updateUser(user);
         if (flag > 0) {

@@ -2,10 +2,12 @@ package com.example.accountbook.vo.user;
 
 import com.example.accountbook.entity.User;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class UserInfoVo {
     private Integer uId;
     private String name;

@@ -46,8 +46,8 @@ public class RoleController {
         }
 
         // 1. check role can do
-        if (!checkModifyGroupRole(reqVo, OPS_ADD)){
-            return new JsonResult(-1,"权限不足或已存在Role");
+        if (!checkModifyGroupRole(reqVo, OPS_ADD)) {
+            return new JsonResult(-1, "权限不足或已存在Role");
         }
         int flag = roleService.addRole(role);
         if (flag > 0) {
@@ -69,6 +69,9 @@ public class RoleController {
         if (!checkModifyGroupRole(reqVo, OPS_UPDATE)){
             return new JsonResult(-1,"权限不足或role不存在");
         }
+        if (reqVo.getTargetId().equals(reqVo.getOperatorId())) {
+            return new JsonResult(-1, "不能修改自己的权限");
+        }
         int flag = roleService.updateRole(role,reqVo.getStatus());
         if (flag > 0) {
             return new JsonResult();
@@ -88,6 +91,9 @@ public class RoleController {
         // 1. check role can do
         if (!checkModifyGroupRole(reqVo, OPS_DELETE)){
             return new JsonResult(-1,"权限不足或role不存在");
+        }
+        if (reqVo.getTargetId().equals(reqVo.getOperatorId())) {
+            return new JsonResult(-1, "不能删除自己");
         }
         int flag = roleService.deleteRole(role);
         if (flag > 0) {

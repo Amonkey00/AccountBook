@@ -22,9 +22,55 @@
             WHERE u_id in
                 (SELECT user_id
                  FROM group_role
-                 WHERE group_id = #{groupId})
+                 WHERE group_id = #{groupId}
+                    <if test="role != null">
+                        AND status = #{role}
+                    </if>
+                )
         </if>
         LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="countMemberList" resultType="_int">
+        SELECT COUNT(*)
+        FROM user_info
+        <if test="groupId != null">
+            WHERE u_id in
+            (SELECT user_id
+            FROM group_role
+            WHERE group_id = #{groupId}
+            <if test="role != null">
+                AND status = #{role}
+            </if>
+            )
+            <if test="keyword != null">
+                AND account LIKE '%${keyword}%'
+            </if>
+        </if>
+    </select>
+
+    <select id="queryMemberList" resultType="com.example.accountbook.vo.user.MemberListVo">
+        SELECT u_id,name,account,email,create_time,t2.status as role_status,introduction
+        FROM
+            (SELECT u_id,name,account,email,create_time,status,introduction
+             FROM user_info
+             WHERE u_id in
+                   (SELECT user_id
+                    FROM group_role
+                    WHERE group_id = #{groupId}
+                      <if test="roleStatus != null">
+                          AND status = #{roleStatus}
+                      </if>
+                   )
+            <if test="keyword != null">
+                AND account LIKE CONCAT('%',#{keyword}, '%')
+            </if>
+             LIMIT #{start}, #{limit}
+                ) t1
+                join (SELECT user_id, status
+                      FROM group_role
+                      WHERE group_id = #{groupId})
+                t2 on t1.u_id = t2.user_id;
     </select>
 
     <update id="updateUser" parameterType="com.example.accountbook.vo.user.UserInfoVo">

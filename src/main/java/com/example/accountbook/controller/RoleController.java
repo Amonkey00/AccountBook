@@ -30,6 +30,9 @@ public class RoleController {
             @RequestParam("groupId") Integer groupId
     ) {
         Role role = roleService.getRole(groupId, userId);
+        if (role == null) {
+            return new JsonResult(-1, "Role 不存在");
+        }
         return new JsonResult(role);
     }
 

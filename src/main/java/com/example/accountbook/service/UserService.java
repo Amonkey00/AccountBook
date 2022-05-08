@@ -1,6 +1,7 @@
 package com.example.accountbook.service;
 import com.example.accountbook.entity.User;
 import com.example.accountbook.model.PageResult;
+import com.example.accountbook.vo.user.MemberListVo;
 import com.example.accountbook.vo.user.UserInfoVo;
 import com.example.accountbook.vo.user.UserListRespVo;
 
@@ -23,8 +24,11 @@ public interface UserService {
 
     User getUserById(Integer userId);
 
-    PageResult<User> getUserList(Integer groupId, Integer start, Integer size);
+    PageResult<User> getUserList(Integer groupId, Integer role ,Integer start, Integer size);
 
     PageResult<UserInfoVo> searchUser(String keyword, Integer start, Integer size);
 
+    PageResult<MemberListVo> searchMember(Integer groupId, String keyword, Integer role, Integer start, Integer size);
+
+    Integer countTotal(Integer groupId);
 }

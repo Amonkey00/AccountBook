@@ -7,10 +7,7 @@ import com.example.accountbook.service.UserService;
 import com.example.accountbook.service.impl.UserServiceImpl;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
-import com.example.accountbook.vo.user.UserInfoVo;
-import com.example.accountbook.vo.user.UserListRespVo;
-import com.example.accountbook.vo.user.UserLoginRespVo;
-import com.example.accountbook.vo.user.UserRegisterRespVo;
+import com.example.accountbook.vo.user.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
@@ -87,13 +84,25 @@ public class UserController {
         return new JsonResult(userInfoVo);
     }
 
+    @GetMapping("/getByAccount")
+    public JsonResult getUserByAccount(
+            @RequestParam("account") String account
+    ) {
+        User user = userService.getUserByAccount(account);
+        if (user == null) {
+            return new JsonResult(-1, "不存在该用户名");
+        }
+        return new JsonResult(user);
+    }
+
     @GetMapping("/getList")
     public JsonResult getUserList(
             @RequestParam(value = "groupId",required = false) Integer groupId,
+            @RequestParam(value = "role", required = false) Integer role,
             @RequestParam(value = "start") Integer start,
             @RequestParam(value = "size") Integer size
     ){
-        PageResult userList = userService.getUserList(groupId, start, size);
+        PageResult userList = userService.getUserList(groupId, role, start, size);
         return new JsonResult(userList);
     }
 
@@ -110,9 +119,21 @@ public class UserController {
         return new JsonResult(result);
     }
 
+    @GetMapping("/searchMember")
+    public JsonResult searchMember(
+            @RequestParam("groupId") Integer groupId,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "role", required = false) Integer role,
+            @RequestParam(value = "start") Integer start,
+            @RequestParam(value = "size") Integer size
+    ) {
+        PageResult<MemberListVo> result = userService.searchMember(groupId, keyword, role, start, size);
+        return new JsonResult(result);
+    }
+
 
     @PostMapping("/update")
-    public JsonResult update(
+    public JsonResult updgate(
             @RequestBody UserInfoVo user
     ) {
         int flag = userService.updateUser(user);

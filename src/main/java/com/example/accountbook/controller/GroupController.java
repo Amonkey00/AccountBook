@@ -6,6 +6,7 @@ import com.example.accountbook.enums.RoleStatusEnum;
 import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.GroupService;
 import com.example.accountbook.service.RoleService;
+import com.example.accountbook.service.UserService;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
 import com.example.accountbook.vo.group.GroupCreateReqVo;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/group")
 public class GroupController {
 
+    @Autowired
+    UserService userService;
     @Autowired
     GroupService groupService;
     @Autowired
@@ -73,6 +76,11 @@ public class GroupController {
         if (!checkGroupRole(userId,group.getGId(),RoleStatusEnum.ADMIN.getCode())) {
             return new JsonResult(-1,"update失败。没有该权限");
         }
+        Group existGroup = groupService.getGroupByName(group.getGroupName());
+        // Judge 合理性
+        if (existGroup != null && !existGroup.getGId().equals(group.getGId())) {
+            return new JsonResult(-1, "update 失败.组名已存在");
+        }
         int flag = groupService.updateGroup(group);
         if (flag > 0) {
             return new JsonResult();
@@ -105,6 +113,15 @@ public class GroupController {
         PageResult<Group> groupList = groupService.getGroupList(userId, start, size);
         return new JsonResult(groupList);
     }
+
+    @GetMapping("/countTotal")
+    public JsonResult getList(
+            @RequestParam(value = "groupId") Integer groupId
+    ) {
+        Integer total = userService.countTotal(groupId);
+        return new JsonResult(total);
+    }
+
 
 
     // ================ Utils =================

@@ -6,8 +6,10 @@ import com.example.accountbook.dao.UserMapper;
 import com.example.accountbook.entity.User;
 import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.UserService;
+import com.example.accountbook.vo.user.MemberListVo;
 import com.example.accountbook.vo.user.UserInfoVo;
 import com.example.accountbook.vo.user.UserListRespVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -65,16 +67,18 @@ public class UserServiceImpl implements UserService {
      * 获取用户列表
      */
     @Override
-    public PageResult<User> getUserList(Integer groupId, Integer start, Integer size) {
+    public PageResult<User> getUserList(Integer groupId, Integer role ,Integer start, Integer size) {
+
         PageResult pageResult = new PageResult();
         List<User> userList = Collections.emptyList();
+        // Validate
+        if (role != null && role.equals(-1)) role = null;
         // Query number
-        Integer total = userMapper.countUserList(groupId);
+        Integer total = userMapper.countUserList(groupId,role);
         // Query data
         start = (start - 1) * size;
-        userList = userMapper.queryUserList(groupId, start, size);
+        userList = userMapper.queryUserList(groupId, role, start, size);
         pageResult = new PageResult(userList);
-
         pageResult.parsePage(total,size);
 
         return pageResult;
@@ -99,5 +103,31 @@ public class UserServiceImpl implements UserService {
 
         // build result
         return result;
+    }
+
+    @Override
+    public PageResult<MemberListVo> searchMember(Integer groupId, String keyword, Integer role, Integer start, Integer size) {
+        PageResult<MemberListVo> result = new PageResult<>();
+        List<MemberListVo> dataList = Collections.emptyList();
+
+        if (StringUtils.isBlank(keyword)) keyword = null;
+        if (role != null && role.equals(-1)) role = null;
+        Integer total = userMapper.countMemberList(groupId, keyword, role);
+        start = Math.min((start - 1) * size, 0);
+        dataList = userMapper.queryMemberList(groupId, keyword, role, start, size);
+
+        // queryRole
+
+        result.setDataList(dataList);
+        result.parsePage(total,size);
+
+        return result;
+    }
+
+    @Override
+    public Integer countTotal(Integer groupId) {
+        // Query number
+        Integer total = userMapper.countUserList(groupId,null);
+        return total;
     }
 }

@@ -11,17 +11,17 @@
         <if test="fromDate != null">
             AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
         </if>
-        <if test="userIds != null">
-            AND creator_id IN
-            <foreach item="item1" index="index" collection="userIds" open="(" separator="," close=")">
-                #{item1}
-            </foreach>
+        <if test="limitName != null">
+            AND creator_name = #{limitName}
         </if>
-        <if test="typeIds != null">
-            AND type_id IN
-            <foreach item="item2" index="index" collection="typeIds" open="(" separator="," close=")">
-                #{item2}
-            </foreach>
+        <if test="limitTypeId != null">
+            AND type_id =#{limitTypeId}
+        </if>
+        <if test="kind == 'IN'.toString()">
+            AND amount > 0
+        </if>
+        <if test="kind == 'OUT'.toString()">
+            AND amount  &lt;0
         </if>
     </select>
 
@@ -32,19 +32,63 @@
         <if test="fromDate != null">
             AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
         </if>
-        <if test="userIds != null">
-            AND creator_id IN
-            <foreach item="item1" index="index" collection="userIds" open="(" separator="," close=")">
-                #{item1}
-            </foreach>
+        <if test="limitName != null">
+            AND creator_name = #{limitName}
         </if>
-        <if test="typeIds != null">
-            AND type_id IN
-            <foreach item="item2" index="index" collection="typeIds" open="(" separator="," close=")">
-                #{item2}
-            </foreach>
+        <if test="limitTypeId != null">
+            AND type_id =#{limitTypeId}
+        </if>
+        <if test="kind == 'IN'.toString()">
+            AND amount > 0
+        </if>
+        <if test="kind == 'OUT'.toString()">
+            AND amount  &lt;0
         </if>
         LIMIT #{start}, #{size}
+    </select>
+
+    <select id="queryRecordPie" parameterType="com.example.accountbook.vo.record.RecordListReqVo" resultType="com.example.accountbook.vo.record.RecordPieRespVo">
+        SELECT type_id, SUM(amount) as total_amount
+        FROM bill_record
+        WHERE r_id > 0
+        <if test="fromDate != null">
+            AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
+        </if>
+        <if test="limitName != null">
+            AND creator_name = #{limitName}
+        </if>
+        <if test="limitTypeId != null">
+            AND type_id =#{limitTypeId}
+        </if>
+        <if test="kind == 'IN'.toString()">
+            AND amount > 0
+        </if>
+        <if test="kind == 'OUT'.toString()">
+            AND amount  &lt;0
+        </if>
+        GROUP BY type_id
+    </select>
+
+    <select id="queryRecordLine" parameterType="com.example.accountbook.vo.record.RecordListReqVo" resultType="com.example.accountbook.vo.record.RecordLineRespVo">
+        SELECT type_id, record_time, SUM(amount) as total_amount
+        FROM bill_record
+        WHERE r_id > 0
+        <if test="fromDate != null">
+            AND record_time >= #{fromDate} AND record_time  &lt;= #{toDate}
+        </if>
+        <if test="limitName != null">
+            AND creator_name = #{limitName}
+        </if>
+        <if test="limitTypeId != null">
+            AND type_id =#{limitTypeId}
+        </if>
+        <if test="kind == 'IN'.toString()">
+            AND amount > 0
+        </if>
+        <if test="kind == 'OUT'.toString()">
+            AND amount  &lt;0
+        </if>
+        GROUP BY type_id, record_time
     </select>
 
 

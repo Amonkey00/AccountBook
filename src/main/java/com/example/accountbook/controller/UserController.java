@@ -47,7 +47,7 @@ public class UserController {
             user = userService.getUserByAccount(user.getAccount());
             token = JwtUtil.buildJwt(user.getUId());
             return new JsonResult(Arrays.asList(token, user.getUId(), user.getName()));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new JsonResult(-1, "USER INSERT添加失败");
         }
     }

@@ -7,14 +7,15 @@ import com.example.accountbook.service.RecordService;
 import com.example.accountbook.service.RoleService;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
-import com.example.accountbook.vo.record.RecordCreateReqVo;
-import com.example.accountbook.vo.record.RecordListReqVo;
-import com.example.accountbook.vo.record.RecordModifyReqVo;
+import com.example.accountbook.vo.record.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/record")
@@ -58,7 +59,7 @@ public class RecordController {
         }
     }
 
-    @GetMapping("/getList")
+    @PostMapping("/getList")
     public JsonResult getList(
             @RequestBody RecordListReqVo reqVo
     ) {
@@ -69,6 +70,32 @@ public class RecordController {
             e.printStackTrace();
             return new JsonResult(-1,"getList 获取失败");
         }
+    }
+
+    @PostMapping("/getPieData")
+    public JsonResult getPieData(
+            @RequestBody RecordListReqVo reqVo
+    ) {
+        try {
+            List<RecordPieRespVo> pieData = recordService.getRecordPieData(reqVo);
+            return new JsonResult(pieData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonResult(-1, "获取饼图数据失败");
+    }
+
+    @PostMapping("/getLineData")
+    public JsonResult getLineData(
+            @RequestBody RecordListReqVo reqVo
+    ) {
+        try {
+            List<RecordLineRespVo> lineData = recordService.getRecordLineData(reqVo);
+            return new JsonResult(lineData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonResult(-1, "获取折线图图数据失败");
     }
 
     @PostMapping("/update")

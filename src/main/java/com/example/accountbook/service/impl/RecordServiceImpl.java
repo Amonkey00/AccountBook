@@ -4,7 +4,9 @@ import com.example.accountbook.dao.RecordMapper;
 import com.example.accountbook.entity.BillRecord;
 import com.example.accountbook.model.PageResult;
 import com.example.accountbook.service.RecordService;
+import com.example.accountbook.vo.record.RecordLineRespVo;
 import com.example.accountbook.vo.record.RecordListReqVo;
+import com.example.accountbook.vo.record.RecordPieRespVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -68,5 +70,15 @@ public class RecordServiceImpl implements RecordService {
         // Compute PageNum
         result.parsePage(total, reqVo.getSize());
         return result;
+    }
+
+    @Override
+    public List<RecordPieRespVo> getRecordPieData(RecordListReqVo reqVo) {
+        return recordMapper.queryRecordPie(reqVo);
+    }
+
+    @Override
+    public List<RecordLineRespVo> getRecordLineData(RecordListReqVo reqVo) {
+        return recordMapper.queryRecordLine(reqVo);
     }
 }

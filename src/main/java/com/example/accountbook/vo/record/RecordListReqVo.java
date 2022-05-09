@@ -12,8 +12,9 @@ public class RecordListReqVo implements Serializable {
     Integer groupId;
     String fromDate;
     String toDate;
-    List<Integer> userIds;
-    List<Integer> typeIds;
+    String limitName;
+    Integer limitTypeId;
+    String kind;
     Integer start;
     Integer size;
 }

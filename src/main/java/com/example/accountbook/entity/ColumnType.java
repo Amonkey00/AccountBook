@@ -12,6 +12,8 @@ import java.io.Serializable;
 public class ColumnType implements Serializable {
     @TableId(value="t_id", type= IdType.AUTO)
     private Integer tId;
+    private Integer groupId;
     private String name;
     private String information;
+    private String kind;
 }

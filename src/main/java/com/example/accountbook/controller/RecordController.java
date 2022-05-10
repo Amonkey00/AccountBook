@@ -72,6 +72,20 @@ public class RecordController {
         }
     }
 
+    @PostMapping("/computeTotal")
+    public JsonResult computeTotal(
+            @RequestBody RecordListReqVo reqVo
+    ) {
+        try {
+            Double total = recordService.computeTotalAmount(reqVo);
+            if (total == null) total = 0.0;
+            return new JsonResult(total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonResult(-1, "获取记录总和数据失败");
+    }
+
     @PostMapping("/getPieData")
     public JsonResult getPieData(
             @RequestBody RecordListReqVo reqVo

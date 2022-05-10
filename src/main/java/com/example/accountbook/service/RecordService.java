@@ -20,6 +20,8 @@ public interface RecordService {
 
     PageResult<BillRecord> getRecordList(RecordListReqVo reqVo);
 
+    Double computeTotalAmount(RecordListReqVo reqVo);
+
     List<RecordPieRespVo> getRecordPieData(RecordListReqVo reqVo);
     List<RecordLineRespVo> getRecordLineData(RecordListReqVo reqVo);
 

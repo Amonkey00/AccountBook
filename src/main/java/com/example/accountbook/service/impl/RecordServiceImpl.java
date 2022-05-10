@@ -73,6 +73,11 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    public Double computeTotalAmount(RecordListReqVo reqVo) {
+        return recordMapper.computeTotalAmount(reqVo);
+    }
+
+    @Override
     public List<RecordPieRespVo> getRecordPieData(RecordListReqVo reqVo) {
         return recordMapper.queryRecordPie(reqVo);
     }

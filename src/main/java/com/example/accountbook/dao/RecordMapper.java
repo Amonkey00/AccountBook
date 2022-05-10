@@ -17,6 +17,7 @@ public interface RecordMapper extends BaseMapper<BillRecord> {
     int countRecordList(RecordListReqVo reqVo);
     List<BillRecord> queryRecordList(RecordListReqVo reqVo);
 
+    Double computeTotalAmount(RecordListReqVo reqVo);
     List<RecordPieRespVo> queryRecordPie(RecordListReqVo reqVo);
     List<RecordLineRespVo> queryRecordLine(RecordListReqVo reqVo);
 }

@@ -5,6 +5,7 @@ import com.example.accountbook.model.PageResult;
 import com.example.accountbook.vo.record.RecordLineRespVo;
 import com.example.accountbook.vo.record.RecordListReqVo;
 import com.example.accountbook.vo.record.RecordPieRespVo;
+import com.example.accountbook.vo.record.RecordTotalDayVo;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface RecordService {
 
     List<RecordPieRespVo> getRecordPieData(RecordListReqVo reqVo);
     List<RecordLineRespVo> getRecordLineData(RecordListReqVo reqVo);
-
+    List<RecordTotalDayVo> getTotalByDay(Integer groupId, String order,
+                                         Integer limit, String fromDate, String toDate);
 }

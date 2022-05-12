@@ -7,6 +7,8 @@ import com.example.accountbook.service.RecordService;
 import com.example.accountbook.vo.record.RecordLineRespVo;
 import com.example.accountbook.vo.record.RecordListReqVo;
 import com.example.accountbook.vo.record.RecordPieRespVo;
+import com.example.accountbook.vo.record.RecordTotalDayVo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -85,5 +87,11 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<RecordLineRespVo> getRecordLineData(RecordListReqVo reqVo) {
         return recordMapper.queryRecordLine(reqVo);
+    }
+
+    @Override
+    public List<RecordTotalDayVo> getTotalByDay(Integer groupId, String order, Integer limit, String fromDate, String toDate) {
+        if (StringUtils.isBlank(order)) order = "DESC";
+        return recordMapper.queryListByDay(groupId, order, limit, fromDate, toDate);
     }
 }

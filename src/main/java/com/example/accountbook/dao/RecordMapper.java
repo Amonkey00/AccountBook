@@ -5,7 +5,9 @@ import com.example.accountbook.entity.BillRecord;
 import com.example.accountbook.vo.record.RecordLineRespVo;
 import com.example.accountbook.vo.record.RecordListReqVo;
 import com.example.accountbook.vo.record.RecordPieRespVo;
+import com.example.accountbook.vo.record.RecordTotalDayVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +22,10 @@ public interface RecordMapper extends BaseMapper<BillRecord> {
     Double computeTotalAmount(RecordListReqVo reqVo);
     List<RecordPieRespVo> queryRecordPie(RecordListReqVo reqVo);
     List<RecordLineRespVo> queryRecordLine(RecordListReqVo reqVo);
+
+    List<RecordTotalDayVo> queryListByDay(@Param("groupId") Integer groupId,
+                                          @Param("order") String order,
+                                          @Param("limit") Integer limit,
+                                          @Param("fromDate") String fromDate,
+                                          @Param("toDate") String toDate);
 }

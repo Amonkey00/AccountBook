@@ -8,13 +8,16 @@ import com.example.accountbook.service.RoleService;
 import com.example.accountbook.utils.JsonResult;
 import com.example.accountbook.utils.JwtUtil;
 import com.example.accountbook.vo.record.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -150,6 +153,27 @@ public class RecordController {
             return new JsonResult();
         }
         return new JsonResult(-1,"Record删除失败");
+    }
+
+    @GetMapping("/getTotalByDay")
+    public JsonResult getTotalByDay (
+            @RequestParam("groupId") Integer groupId,
+            @RequestParam(value = "order", required = false) String order,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "fromDate", required = false) String fromDate,
+            @RequestParam(value = "toDate",required = false) String toDate
+    ) {
+        try {
+            if (StringUtils.isBlank(toDate)) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                toDate = sdf.format(new Date());
+            }
+            List<RecordTotalDayVo> totalByDay = recordService.getTotalByDay(groupId, order, limit, fromDate, toDate);
+            return new JsonResult(totalByDay);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JsonResult(-1, "获取收入信息有误");
     }
 
 

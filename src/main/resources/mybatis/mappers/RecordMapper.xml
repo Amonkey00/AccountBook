@@ -44,6 +44,7 @@
         <if test="kind == 'OUT'.toString()">
             AND amount  &lt;0
         </if>
+        ORDER BY record_time DESC
     </select>
 
     <select id="queryRecordList" parameterType="com.example.accountbook.vo.record.RecordListReqVo" resultType="com.example.accountbook.entity.BillRecord">
@@ -65,6 +66,7 @@
         <if test="kind == 'OUT'.toString()">
             AND amount  &lt;0
         </if>
+        ORDER BY record_time DESC
         LIMIT #{start}, #{size}
     </select>
 
@@ -111,6 +113,21 @@
             AND amount  &lt;0
         </if>
         GROUP BY type_id, record_time
+    </select>
+
+    <select id="queryListByDay" resultType="com.example.accountbook.vo.record.RecordTotalDayVo">
+        SELECT record_time as time, SUM(amount) as amount
+        FROM bill_record
+        WHERE group_id = #{groupId}
+          AND amount > 0
+        <if test="fromDate != null">
+            AND record_time >= #{fromDate}
+        </if>
+        <if test="toDate != null">
+            AND record_time &lt;= #{toDate}
+        </if>
+        GROUP BY record_time
+        ORDER BY record_time ${order}
     </select>
 
 
